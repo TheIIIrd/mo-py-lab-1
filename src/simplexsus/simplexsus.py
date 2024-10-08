@@ -223,9 +223,12 @@ def simplex_table_iteration(c, A, b, f, simplex_resolve):
             new_A[i][j] = A[i][j] - ((A[i][simplex_resolve[2]] * A[simplex_resolve[1]][j]) / simplex_resolve[0])
 
     # Обновляем значение целевой функции
-    f = f - ((c[simplex_resolve[2]] * b[simplex_resolve[1]]) / simplex_resolve[0])
+    new_f = f - ((c[simplex_resolve[2]] * b[simplex_resolve[1]]) / simplex_resolve[0])
 
-    return new_c, new_A, new_b, f
+    if new_f <= f:
+        return new_c, new_A, new_b, new_f
+    
+    raise ValueError("Не получается улучшить симплекс-таблицу")
 
 
 def simplexsus(minimize, c, A, b, f):
@@ -276,3 +279,5 @@ def simplexsus(minimize, c, A, b, f):
     else:
         print("[ - ] Check: BAD")
         return 1
+
+    return f

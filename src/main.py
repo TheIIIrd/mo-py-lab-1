@@ -20,7 +20,7 @@ def main():
     # b = [2, -2, 5]
     # f = 0
 
-    simplexsus(minimize, c, A, b, f)
+    print("[ + ] Ans:", simplexsus(minimize, c, A, b, f))
 
     return 0
 
