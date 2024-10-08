@@ -241,7 +241,7 @@ def simplexsus(minimize, c, A, b, f):
         print("[ + ] Check: OK")
 
         # Инвертируем c, если ищем минимум
-        if minimize:
+        if not minimize:
             for i in range(len(c)):
                 c[i] *= -1
 
