@@ -104,7 +104,10 @@ def find_simplex_resolve(c, A, b):
                 for col in range(len(A[0])):
                     if A[row][col] < 0:
                         # Возвращаем минимальное отношение для данного столбца
-                        return find_min_ratio(A, b, col)
+                        try:
+                            return find_min_ratio(A, b, col)
+                        except:
+                            return ["inf"]
 
         c_max_value = max(c)
         if c_max_value < 0:
@@ -112,7 +115,10 @@ def find_simplex_resolve(c, A, b):
             return ["not"]
 
         c_max_index = c.index(c_max_value)
-        return find_min_ratio(A, b, c_max_index)
+        try:
+            return find_min_ratio(A, b, c_max_index)
+        except:
+            return ["inf"]
 
     else:
         return ["not"]
@@ -249,6 +255,9 @@ def simplexsus(minimize, c, A, b, f):
             # Обработка результатов нахождения разрешающего элемента
             if simplex_resolve == ["not"]:
                 print("[ - ] There's no answer")
+                return 1
+            if simplex_resolve == ["inf"]:
+                print("[ - ] Infinite number of solutions")
                 return 1
 
             print("[ * ] The resolving element is found:", simplex_resolve)
