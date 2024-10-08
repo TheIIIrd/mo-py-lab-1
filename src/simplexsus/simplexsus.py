@@ -280,4 +280,7 @@ def simplexsus(minimize, c, A, b, f):
         print("[ - ] Check: BAD")
         return 1
 
-    return f
+    if minimize:
+        return f
+
+    return f * -1
