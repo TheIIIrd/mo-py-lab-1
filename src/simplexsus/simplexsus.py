@@ -144,7 +144,7 @@ def find_min_ratio(A, b, min_ratio_col):
 
     # Если не найден подходящий индекс, выбрасываем ошибку
     if min_ratio_row == -1:
-        raise ValueError("Нет допустимого разрешающего элемента.")
+        raise ValueError("[ ! ] Нет допустимого разрешающего элемента.")
 
     return [A[min_ratio_row][min_ratio_col], min_ratio_row, min_ratio_col]
 
@@ -173,7 +173,7 @@ def simplex_table_iteration(c, A, b, f, simplex_resolve):
         Обновленная матрица ограничений.
     new_b : list
         Обновленный вектор правых частей (свободные коэффициенты).
-    f : float
+    new_f : float
         Обновленное значение целевой функции.
     """
     
@@ -228,7 +228,7 @@ def simplex_table_iteration(c, A, b, f, simplex_resolve):
     if new_f <= f:
         return new_c, new_A, new_b, new_f
     
-    raise ValueError("Не получается улучшить симплекс-таблицу")
+    raise ValueError("[ ! ] Не получается улучшить симплекс-таблицу")
 
 
 def simplexsus(minimize, c, A, b, f):
