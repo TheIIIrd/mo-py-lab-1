@@ -281,6 +281,8 @@ def simplexsus(minimize, c, A, b, f):
         return 1
 
     if minimize:
+        print("[ * ] The function goes to the minimum")
         return f
 
+    print("[ * ] The function goes to the maximum")
     return f * -1
