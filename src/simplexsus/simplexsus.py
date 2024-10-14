@@ -53,11 +53,10 @@ def check_simplex_response(c, A, b):
     for row in range(len(b)):
         if b[row] < 0:                      # Если есть отрицательный элемент в b
             for col in range(len(A[0])):    # Ошибка в исходном коде: A должен быть матрицей
-                if A[row][col] < 0:
-                    return True     # Существуют отрицательные коэффициенты
-            return False            # Нет подходящих коэффициентов
+                if min(A[row][col]) >= 0:
+                    return False     # Нет подходящих коэффициентов        
 
-    return True
+    return True # Существуют отрицательные коэффициенты
 
 
 def create_simplex_table(c, A, b, f):
