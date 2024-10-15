@@ -92,7 +92,10 @@ def print_simplex_table(simplex_table):
     for i in range(len(simplex_table)):
         for j in simplex_table[i]:
             # Выравнивание по правому краю, 2 знака после запятой
-            print(f"{float(j):>{max_width}.2f}", end=" | ")
+            if j == 0:
+                print(f"{float(0):>{max_width}.2f}", end=" | ")
+            else:
+                print(f"{float(j):>{max_width}.2f}", end=" | ")
         print()
 
 
