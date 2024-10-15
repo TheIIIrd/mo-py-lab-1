@@ -77,10 +77,17 @@ def create_simplex_table(c, A, b, f):
 
 def print_simplex_table(simplex_table):
     """
-    Выводит матрицу в терминал.
+    Выводит симплекс-таблицу в терминал с заголовками.
     """
+    print()
+
     # Определяем максимальную ширину для форматирования
     max_width = max(len(str(float(j))) for row in simplex_table for j in row) + 2
+
+    # Выводим заголовки
+    headers = ["b"] + [f"x{i+1}" for i in range(len(simplex_table[0]) - 1)]
+    print(" | ".join(f"{header:>{max_width}}" for header in headers))
+    print("-" * (max_width * len(headers) + 3 * (len(headers) - 1)))
 
     for i in range(len(simplex_table)):
         for j in simplex_table[i]:
@@ -284,7 +291,7 @@ def simplexsus(minimize, c, A, b, f):
 
     if minimize:
         print("[ * ] The function goes to the minimum")
-        return f
+        return round(f, 2)
 
     print("[ * ] The function goes to the maximum")
-    return f * -1
+    return round(f * -1, 2)
