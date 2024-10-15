@@ -82,7 +82,8 @@ def print_simplex_table(simplex_table):
     print()
 
     # Определяем максимальную ширину для форматирования
-    max_width = max(len(str(float(j))) for row in simplex_table for j in row) + 2
+    # max_width = max(len(str(float(j))) for row in simplex_table for j in row) + 2
+    max_width = 6
 
     # Выводим заголовки
     headers = ["b"] + [f"x{i+1}" for i in range(len(simplex_table[0]) - 1)]
@@ -95,7 +96,7 @@ def print_simplex_table(simplex_table):
             if j == 0:
                 print(f"{float(0):>{max_width}.2f}", end=" | ")
             else:
-                print(f"{float(j):>{max_width}.2f}", end=" | ")
+                print(f"{round(float(j), 2):>{max_width}.2f}", end=" | ")
         print()
 
 
