@@ -1,17 +1,20 @@
 """
 Программа реализует симплекс-метод для решения задач линейного программирования.
 Содержит функции для проверки входных данных, создания симплекс-таблицы,
-поиска разрешающего элемента, выполнения итераций симплекс-метода и вывода
-результатов на экран.
+поиска разрешающего элемента, выполнения итераций симплекс-метода, преобразования
+в двойственную задачу и вывода результатов на экран.
 
 Функции:
 - check_simplex_table: Проверяет корректность входных данных для симплекс-метода.
-- check_simplex_response: Проверяет возможность существования решения и наличие отрицательных значений.
+- check_simplex_response: Проверяет существование решения и возможность перехода к следующей итерации.
+- check_simplex_answer: Проверяет корректность решения, полученного с использованием симплекс-метода.
 - create_simplex_table: Создает симплекс-таблицу из заданных коэффициентов, ограничений и правых частей.
+- create_simplex_variables: Создает имена переменных для симплекс-таблицы.
 - print_simplex_table: Выводит симплекс-таблицу в консоль в форматированном виде.
-- find_simplex_resolve: Находит разрешающий элемент в симплекс-методе.
-- find_min_ratio: Находит минимальное отношение для заданного столбца.
-- simplex_table_iteration: Выполняет одну итерацию симплекс-метода, обновляя коэффициенты и ограничения.
+- find_simplex_resolve: Находит разрешающий элемент в симплекс-методе и определяет условия для продолжения.
+- find_min_ratio: Находит минимальное отношение для заданного столбца в симплекс-таблице.
+- swap_variables: Меняет местами элементы в списках переменных на основе разрешающего элемента.
+- simplex_table_iteration: Выполняет одну итерацию симплекс-метода с обновлением коэффициентов и ограничений.
 - simplexsus: Основная функция симплекс-метода, выполняет проверку данных и находит оптимальное решение.
 
 Для использования достаточно задать коэффициенты целевой функции, ограничения и правые части.
@@ -53,6 +56,21 @@ def check_simplex_response(c, A, b):
                     return False            # Нет подходящих коэффициентов
 
     return True  # Существуют отрицательные коэффициенты
+
+
+def check_simplex_answer(c, b, f, var_row, var_col):
+    """
+    Проверяет корректность решения, полученного с использованием симплекс-метода.
+    """
+    check_f = 0
+
+    for i in range(len(var_row)):
+        if var_row[i] in var_col:
+            check_f += b[i] * c[var_col.index(var_row[i]) - 1]
+
+    if round(check_f, 2) == round(f, 2):
+        return True
+    return False
 
 
 def create_simplex_table(c, A, b, f):
@@ -237,6 +255,7 @@ def simplexsus(c, A, b, f, minimize):
     # Проверка условий
     if check_simplex_table(c, A, b):
         print("[ + ] Check: OK")
+        old_b = b.copy()
 
         # Инвертируем c, если ищем минимум
         if minimize:
@@ -244,6 +263,7 @@ def simplexsus(c, A, b, f, minimize):
                 c[i] *= -1
 
         var_row, var_col = create_simplex_variables(A)  # Создание обозначений симплекс-таблицы
+        old_var_row = var_row.copy()
 
         while (max(c) > 0) or (min(b) < 0):
             simplex_table = create_simplex_table(c, A, b, f)        # Создание симплекс-таблицы
@@ -258,27 +278,28 @@ def simplexsus(c, A, b, f, minimize):
                 print("[ - ] Infinite number of solutions")
                 return 1
 
-            print(
-                "[ * ] The resolving element is found:",
-                round(simplex_resolve[0], 2),
-                simplex_resolve[1:],
-            )
+            print("[ * ] The resolving element is found:", round(simplex_resolve[0], 2), simplex_resolve[1:])
 
             var_row, var_col = swap_variables(var_row, var_col, simplex_resolve)
             c, A, b, f = simplex_table_iteration(c, A, b, f, simplex_resolve)
 
         # Найдено оптимальное решение
         print("\n[ + ] OPTI ANS")
-        simplex_table = create_simplex_table(c, A, b, f)  # Создание симплекс-таблицы
-        print_simplex_table(simplex_table, var_row, var_col)  # Вывод симплекс-таблицы
+        simplex_table = create_simplex_table(c, A, b, f)        # Создание симплекс-таблицы
+        print_simplex_table(simplex_table, var_row, var_col)    # Вывод симплекс-таблицы
 
     else:
-        print("[ - ] Check: BAD")
+        print("[ - ] Check: BAD TABLE")
         return 1
 
-    if minimize:
-        print("[ * ] The function goes to the minimum")
-        return round(f, 2)
+    if check_simplex_answer(c, old_b, f, old_var_row, var_col):
+        if minimize:
+            print("[ * ] The function goes to the minimum")
+            return round(f, 2)
 
-    print("[ * ] The function goes to the maximum")
-    return round(f * -1, 2)
+        else:
+            print("[ * ] The function goes to the maximum")
+            return round(f * -1, 2)
+
+    print("[ - ] Check: BAD ANS")
+    return -1
