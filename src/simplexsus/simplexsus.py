@@ -284,7 +284,7 @@ def simplexsus(c, A, b, f, minimize):
             c, A, b, f = simplex_table_iteration(c, A, b, f, simplex_resolve)
 
         # Найдено оптимальное решение
-        print("\n[ + ] OPTI ANS")
+        print("\n[ + ] OPTI ANS", end="")
         simplex_table = create_simplex_table(c, A, b, f)        # Создание симплекс-таблицы
         print_simplex_table(simplex_table, var_row, var_col)    # Вывод симплекс-таблицы
 
