@@ -137,9 +137,8 @@ def find_simplex_resolve(c, A, b):
             if b[row] < 0:
                 for col in range(len(A[0])):
                     if A[row][col] < 0:
-                        # Возвращаем минимальное отношение для данного столбца
                         try:
-                            return find_min_ratio(A, b, col)
+                            return [A[row][col], row, col]
                         except:
                             return ["inf"]
 
